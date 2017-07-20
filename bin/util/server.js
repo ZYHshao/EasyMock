@@ -1,14 +1,42 @@
-var http = require('http');  
-http.createServer(function (request, response) {  
-  
-    // 发送 HTTP 头部   
-    // HTTP 状态值: 200 : OK  
-    // 内容类型: text/plain  
-    response.writeHead(200, {'Content-Type': 'text/plain'});  
-  
-    // 发送响应数据 "Hello World"  
-    response.end('Hello World\n');  
-}).listen(8888);  
-  
-// 终端打印如下信息  
-console.log('Server running at http://127.0.0.1:8888/');  
+var http = require('http'); 
+var Mock = require('mockjs'); 
+var express = require('express');
+var app = express();
+
+app.get('/mockget', function(req, res){
+	var data = Mock.mock({
+		"test":'@integer(60, 100)', 
+		"test1":'@string(0, 5)', 
+		"test2":'@string(5)'
+	});
+	response = {
+		"data":data
+	}
+	res.end(JSON.stringify(response,null,4));
+});
+
+app.post('/mockpost', function(req, res){
+	var data = Mock.mock({
+		"name":req.body.name,
+		"cartId":'@string', 
+		"price":'@integer(0, 10000)', 
+		"number":'@integer(0, 10)',
+		"subModel":Mock.mock({
+			"subModelId" : '@string(10)'
+		})
+	});
+	console.log(data);
+
+	response = {
+		"data":data
+	}
+	fileManager.writeFileInDefaultPath(JSON.stringify(response));
+	res.end(JSON.stringify(response));
+});
+
+var server = app.listen(8082, function(){
+	var host = server.address().address
+	var port = server.address().port
+
+	console.log("应用实例，访问地址为 http://%s:%s", host, port)
+})

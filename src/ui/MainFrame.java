@@ -15,11 +15,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
+import tools.MockTool;
+import tools.MockToolListener;
 
-public class MainFrame extends Frame {
+
+public class MainFrame extends Frame implements MockToolListener{
 
 	private static final long serialVersionUID = -6297718732599673960L;
-
+	private MockTool mockTool = new MockTool();
+	private Button startButton = null;
+	
 	public MainFrame() throws HeadlessException {
 		super();
 	}
@@ -41,7 +46,8 @@ public class MainFrame extends Frame {
 	}
 	
 	public void setDisplay() {
-		this.setSize(new Dimension(300, 600));
+		mockTool.setToolListener(this);
+		this.setSize(new Dimension(400, 600));
 		this.setResizable(false);
 		this.setLocation(new Point(400, 150));
 		this.setTitle("EasyMock-您的数据模拟管家!");
@@ -92,37 +98,46 @@ public class MainFrame extends Frame {
 		//panel
 		Panel panel = new Panel(null);
 		this.add(panel);
-		Button button = new Button();
-		button.setLabel("启动服务");
-		button.setBounds(90, 400, 120, 50);
-		button.addActionListener(new ActionListener() {
+		startButton = new Button();
+		startButton.setLabel("启动服务");
+		startButton.setBounds(140, 400, 120, 50);
+		startButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				try{
-			    String path = System.getProperty("user.dir");
-				String command = "/usr/local/bin/node "+path+"/src/util/server.js";
-				Process process = null;
-				
-				process = Runtime.getRuntime().exec(command);
-				
-				BufferedReader stdout = new BufferedReader(new InputStreamReader(  
-	                    process.getInputStream()));  
-	            String line = null;  
-	            line = stdout.readLine();
-	            while (line!=null) {  
-	                System.out.println(line); 
-	                line = stdout.readLine();
-	            }  
-	            stdout.close(); 
-	            } catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if (mockTool.getIsStarting()) {
+					mockTool.closeServer();
+				}else{
+					mockTool.startServer();
 				}
+				startButton.setEnabled(false);
 			}
 		});
-		panel.add(button);
+		panel.add(startButton);
 		this.setVisible(true);
+	}
+
+	@Override
+	public void taskFinish(Boolean success, String info ,int type) {
+		switch (type) {
+		case 1:
+		{
+			if (success) {
+				startButton.setLabel("关闭服务");
+			}
+		}
+			break;
+		case 2:
+		{
+			if (success) {
+				startButton.setLabel("开启服务");
+			}
+		}
+			break;
+		default:
+			break;
+		}
+		startButton.setEnabled(true);
 	}
 	
 	
