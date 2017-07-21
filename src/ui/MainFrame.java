@@ -1,11 +1,15 @@
 package ui;
 import java.awt.Button;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
+import java.awt.Label;
+import java.awt.List;
 import java.awt.Panel;
 import java.awt.Point;
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -24,6 +28,8 @@ public class MainFrame extends Frame implements MockToolListener{
 	private static final long serialVersionUID = -6297718732599673960L;
 	private MockTool mockTool = new MockTool();
 	private Button startButton = null;
+	private Panel mainPanel = null;
+	private TextArea textArea = null;
 	
 	public MainFrame() throws HeadlessException {
 		super();
@@ -96,11 +102,11 @@ public class MainFrame extends Frame implements MockToolListener{
 			}
 		});
 		//panel
-		Panel panel = new Panel(null);
-		this.add(panel);
+		mainPanel = new Panel(null);
+		this.add(mainPanel);
 		startButton = new Button();
 		startButton.setLabel("启动服务");
-		startButton.setBounds(140, 400, 120, 50);
+		startButton.setBounds(300, 530, 80, 40);
 		startButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -113,10 +119,31 @@ public class MainFrame extends Frame implements MockToolListener{
 				startButton.setEnabled(false);
 			}
 		});
-		panel.add(startButton);
+		Button saveBtn = new Button("SAVE");
+		saveBtn.setBounds(230, 510, 60, 20);
+		mainPanel.add(saveBtn);
+		mainPanel.add(startButton);
+		this.creatList();
+		Label title = new Label("请编写您的Mock.js对象代码",Label.CENTER);
+		title.setBounds(120, 10, 280, 40);
+		title.setFont(new Font("", 1, 20));
+		mainPanel.add(title);
+		textArea = new TextArea();
+		textArea.setBounds(140, 70, 230, 430);
+		mainPanel.add(textArea);
 		this.setVisible(true);
 	}
 
+	
+	private void creatList() {
+		List list = new List();
+		list.setBounds(0, 0, 120, 540);
+		mainPanel.add(list);
+		Button newButton = new Button("新建API服务");
+		newButton.setBounds(0, 540, 120, 40);
+		mainPanel.add(newButton);
+	}
+	
 	@Override
 	public void taskFinish(Boolean success, String info ,int type) {
 		switch (type) {

@@ -10,9 +10,9 @@ public class MockTask {
 	public void setTaskString(String taskString) {
 		this.taskString = taskString;
 	}
-	public MockTask() {
+	public MockTask(String mockstr) {
 		// TODO Auto-generated constructor stub
-		taskString =  String.format(formatString,"get","mock","{\"test\":\'@integer(60, 100)\', \"test1\":\'@string(0, 5)\', \"test2\":\'@string(5)\'}");
+		taskString =  String.format(formatString,"get","mock",mockstr);
 	}
 
 }

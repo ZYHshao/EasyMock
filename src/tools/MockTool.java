@@ -36,6 +36,7 @@ public class MockTool {
      * */
 	public void startServer() {
 		String formatString =null;
+		this.closeServer();
 		try {
 			formatString = readBaseCommandFile();
 			System.out.println(formatString);
@@ -44,7 +45,7 @@ public class MockTool {
 			e.printStackTrace();
 		}
 		if (formatString!=null) {
-			String finishStirg =  formatString + (new MockTask()).getTaskString();
+			String finishStirg =  formatString + (new MockTask("")).getTaskString();
 			new Thread(){
 				public void run() {
 					String path = writeJSFile(finishStirg, "name");
