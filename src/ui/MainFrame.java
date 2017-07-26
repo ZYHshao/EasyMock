@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
+import tools.MockFile;
+import tools.MockFileManager;
 import tools.MockTool;
 import tools.MockToolListener;
 
@@ -121,6 +123,15 @@ public class MainFrame extends Frame implements MockToolListener{
 		});
 		Button saveBtn = new Button("SAVE");
 		saveBtn.setBounds(230, 510, 60, 20);
+		saveBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				MockFile file = new MockFile(textArea.getText(), "get", "mock");
+				mockTool.addMockHnadler(file);
+			}
+		});
 		mainPanel.add(saveBtn);
 		mainPanel.add(startButton);
 		this.creatList();
@@ -129,7 +140,7 @@ public class MainFrame extends Frame implements MockToolListener{
 		title.setFont(new Font("", 1, 20));
 		mainPanel.add(title);
 		textArea = new TextArea();
-		textArea.setBounds(140, 70, 230, 430);
+		textArea.setBounds(140, 90, 230, 410);
 		mainPanel.add(textArea);
 		this.setVisible(true);
 	}

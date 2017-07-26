@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 public class MockTool {
 	
@@ -19,6 +20,8 @@ public class MockTool {
 	private Boolean isStarting = false;
 	
 	private MockToolListener toolListener = null;
+	
+	private MockFileManager fileManager = new MockFileManager();
 	
 	public int STATT_SERVER = 1;
 	public int CLOSE_SERVER = 2;
@@ -45,10 +48,16 @@ public class MockTool {
 			e.printStackTrace();
 		}
 		if (formatString!=null) {
-			String finishStirg =  formatString + (new MockTask("")).getTaskString();
+			String mockString = "";
+			ArrayList<MockFile> files = fileManager.getMockFiles();
+			for(int i=0;i<files.size();i++){
+				MockTask task = new MockTask(files.get(i).getContent(), files.get(i).getMothod(), files.get(i).getPath());
+				mockString = mockString+task.getTaskString();
+			}
+			String finishStirg =  formatString + mockString;
 			new Thread(){
 				public void run() {
-					String path = writeJSFile(finishStirg, "name");
+					String path = writeJSFile(finishStirg, "mocjdata.js");
 					String command = "/usr/local/bin/node "+path;
 					isStarting = runTask(command);
 					if (toolListener!=null) {
@@ -101,7 +110,7 @@ public class MockTool {
 	
 	private String writeJSFile(String content,String name) {
 		File dir = new File(userPaht+"/EasyMock");
-        File file = new File(userPaht+"/EasyMock","name.js");   
+        File file = new File(userPaht+"/EasyMock","mocjdata.js");   
         //如果文件夹不存在则创建   
         if  (!dir.exists())     
         {     
@@ -133,7 +142,7 @@ public class MockTool {
             // TODO Auto-generated catch block  
             e.printStackTrace();  
         }  
-        return userPaht+"/EasyMock/name.js";
+        return userPaht+"/EasyMock/mocjdata.js";
 	}
 	
 	private String readBaseCommandFile() throws URISyntaxException {
@@ -185,6 +194,9 @@ public class MockTool {
 		this.toolListener = toolListener;
 	}
 
+	public void addMockHnadler(MockFile file) {
+		fileManager.addMockFile(file);
+	}
 
 	
 }
