@@ -10,6 +10,7 @@ import java.awt.List;
 import java.awt.Panel;
 import java.awt.Point;
 import java.awt.TextArea;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -152,6 +153,15 @@ public class MainFrame extends Frame implements MockToolListener{
 		mainPanel.add(list);
 		Button newButton = new Button("新建API服务");
 		newButton.setBounds(0, 540, 120, 40);
+		Frame frame = this;
+		newButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				NewDialog dialog = new NewDialog(frame);
+				dialog.setVisible(true);
+			}
+		});
 		mainPanel.add(newButton);
 	}
 	
