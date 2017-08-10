@@ -197,6 +197,10 @@ public class MockTool {
 	public void addMockHnadler(MockFile file) {
 		fileManager.addMockFile(file);
 	}
+	
+	public ArrayList<MockFile> getAllMockFile() {
+		return fileManager.getMockFiles();
+	}
 
 	
 }

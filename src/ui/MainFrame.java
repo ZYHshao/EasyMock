@@ -13,26 +13,34 @@ import java.awt.TextArea;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 
 import tools.MockFile;
 import tools.MockFileManager;
 import tools.MockTool;
 import tools.MockToolListener;
+import ui.NewDialog.NewDialogListener;
 
 
-public class MainFrame extends Frame implements MockToolListener{
+public class MainFrame extends Frame implements MockToolListener,NewDialogListener{
 
 	private static final long serialVersionUID = -6297718732599673960L;
 	private MockTool mockTool = new MockTool();
 	private Button startButton = null;
 	private Panel mainPanel = null;
 	private TextArea textArea = null;
+	private List interfaceList = null;
+	private ArrayList<MockFile> mockFiles = new ArrayList<>();
+	private int currentSelectedMockFileIndex = -1;//默认设置为-1 表示没有选中
+	
 	
 	public MainFrame() throws HeadlessException {
 		super();
@@ -148,9 +156,21 @@ public class MainFrame extends Frame implements MockToolListener{
 
 	
 	private void creatList() {
-		List list = new List();
-		list.setBounds(0, 0, 120, 540);
-		mainPanel.add(list);
+		mockFiles.addAll(mockTool.getAllMockFile());
+		interfaceList = new List();
+		MainFrame self = this;
+		interfaceList.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				self.currentSelectedMockFileIndex = interfaceList.getSelectedIndex();
+				MockFile file = mockFiles.get(self.currentSelectedMockFileIndex);
+				textArea.setText(file.getContent());
+			}
+		});
+		interfaceList.setBounds(0, 0, 120, 540);
+		mainPanel.add(interfaceList);
 		Button newButton = new Button("新建API服务");
 		newButton.setBounds(0, 540, 120, 40);
 		Frame frame = this;
@@ -159,10 +179,14 @@ public class MainFrame extends Frame implements MockToolListener{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				NewDialog dialog = new NewDialog(frame);
+				dialog.setListener(self);
 				dialog.setVisible(true);
 			}
 		});
 		mainPanel.add(newButton);
+		for (int i = 0; i < mockFiles.size(); i++) {
+			interfaceList.add(mockFiles.get(i).getPath());
+		}
 	}
 	
 	@Override
@@ -186,6 +210,29 @@ public class MainFrame extends Frame implements MockToolListener{
 			break;
 		}
 		startButton.setEnabled(true);
+	}
+
+	@Override
+	public void createMockAPi(String apiName) {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < mockFiles.size(); i++) {
+			if (mockFiles.get(i).getPath().compareTo(apiName)==0) {
+				return;
+			}
+		}
+		MockFile file = new MockFile("", "get", apiName);
+		mockTool.addMockHnadler(file);
+		this.updateList();
+	}
+	
+	
+	private void updateList(){
+		mockFiles.removeAll(mockFiles);
+		mockFiles.addAll(mockTool.getAllMockFile());
+		interfaceList.removeAll();
+		for (int i = 0; i < mockFiles.size(); i++) {
+			interfaceList.add(mockFiles.get(i).getPath());
+		}
 	}
 	
 	
