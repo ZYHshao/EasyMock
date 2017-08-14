@@ -117,6 +117,26 @@ public class MockFileManager {
         }  
 		
 	}
+	
+	public void updateMockFile(MockFile mock) {
+		int index = 0;
+		for(int i=0;i<mockFiles.size();i++){
+			if (mock.getPath().compareTo(mockFiles.get(i).getPath())==0) {
+				index = i;
+			}
+		}
+		//存数据
+		try    
+        {     
+			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(getMockFilePath(index)));
+			out.writeObject(mock);
+			out.close();
+   			mockFiles.remove(index);
+   			mockFiles.add(index, mock);
+        }catch(Exception e) {    
+            e.printStackTrace();  
+        }  
+	}
 
 
 

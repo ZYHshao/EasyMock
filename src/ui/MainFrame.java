@@ -113,6 +113,7 @@ public class MainFrame extends Frame implements MockToolListener,NewDialogListen
 			}
 		});
 		//panel
+		MainFrame self= this;
 		mainPanel = new Panel(null);
 		this.add(mainPanel);
 		startButton = new Button();
@@ -137,8 +138,9 @@ public class MainFrame extends Frame implements MockToolListener,NewDialogListen
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				MockFile file = new MockFile(textArea.getText(), "get", "mock");
-				mockTool.addMockHnadler(file);
+				MockFile file = new MockFile(textArea.getText(), "get", mockFiles.get(self.currentSelectedMockFileIndex).getPath());
+				mockTool.updateMockHandler(file);
+				self.updateList();
 			}
 		});
 		mainPanel.add(saveBtn);
@@ -222,6 +224,9 @@ public class MainFrame extends Frame implements MockToolListener,NewDialogListen
 		}
 		MockFile file = new MockFile("", "get", apiName);
 		mockTool.addMockHnadler(file);
+		if (currentSelectedMockFileIndex==-1) {
+			currentSelectedMockFileIndex=0;
+		}
 		this.updateList();
 	}
 	
@@ -232,6 +237,9 @@ public class MainFrame extends Frame implements MockToolListener,NewDialogListen
 		interfaceList.removeAll();
 		for (int i = 0; i < mockFiles.size(); i++) {
 			interfaceList.add(mockFiles.get(i).getPath());
+		}
+		if (currentSelectedMockFileIndex!=-1) {
+			interfaceList.select(currentSelectedMockFileIndex);
 		}
 	}
 	

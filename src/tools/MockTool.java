@@ -198,6 +198,10 @@ public class MockTool {
 		fileManager.addMockFile(file);
 	}
 	
+	public void updateMockHandler(MockFile file) {
+		fileManager.updateMockFile(file);
+	}
+	
 	public ArrayList<MockFile> getAllMockFile() {
 		return fileManager.getMockFiles();
 	}
