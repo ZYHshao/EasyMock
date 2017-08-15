@@ -118,6 +118,13 @@ public class MockFileManager {
 		
 	}
 	
+	public void removeLast() {
+		//存数量
+		mockFiles.remove(this.getMocksFileCount()-1);
+		this.setMocksFileCount(this.getMocksFileCount()-1);
+		
+	}
+	
 	public void updateMockFile(MockFile mock) {
 		int index = 0;
 		for(int i=0;i<mockFiles.size();i++){

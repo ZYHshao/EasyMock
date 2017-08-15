@@ -1,5 +1,6 @@
 package ui;
 import java.awt.Button;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
@@ -132,17 +133,39 @@ public class MainFrame extends Frame implements MockToolListener,NewDialogListen
 			}
 		});
 		Button saveBtn = new Button("SAVE");
-		saveBtn.setBounds(230, 510, 60, 20);
+		saveBtn.setBounds(170, 510, 60, 20);
 		saveBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				MockFile file = new MockFile(textArea.getText(), "get", mockFiles.get(self.currentSelectedMockFileIndex).getPath());
-				mockTool.updateMockHandler(file);
-				self.updateList();
+				if (self.currentSelectedMockFileIndex!=-1) {
+					MockFile file = new MockFile(textArea.getText(), "get", mockFiles.get(self.currentSelectedMockFileIndex).getPath());
+					mockTool.updateMockHandler(file);
+					self.updateList();
+				}
 			}
 		});
+		Button deleteBtn = new Button("DELETE LAST");
+		deleteBtn.setBounds(170, 550, 90, 20);
+		deleteBtn.setForeground(Color.red);
+		deleteBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if (self.currentSelectedMockFileIndex!=-1) {
+					mockTool.removeMockHandler(null);
+					if (self.currentSelectedMockFileIndex==0) {
+						self.currentSelectedMockFileIndex=-1;
+					}else{
+						self.currentSelectedMockFileIndex = 0;
+					}
+					self.updateList();
+				}
+			}
+		});
+		mainPanel.add(deleteBtn);
 		mainPanel.add(saveBtn);
 		mainPanel.add(startButton);
 		this.creatList();
@@ -240,6 +263,10 @@ public class MainFrame extends Frame implements MockToolListener,NewDialogListen
 		}
 		if (currentSelectedMockFileIndex!=-1) {
 			interfaceList.select(currentSelectedMockFileIndex);
+			MockFile file = mockFiles.get(currentSelectedMockFileIndex);
+			textArea.setText(file.getContent());
+		}else{
+			textArea.setText("");
 		}
 	}
 	

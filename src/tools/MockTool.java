@@ -194,6 +194,10 @@ public class MockTool {
 		this.toolListener = toolListener;
 	}
 
+	public void removeMockHandler(MockFile file) {
+		fileManager.removeLast();
+	}
+	
 	public void addMockHnadler(MockFile file) {
 		fileManager.addMockFile(file);
 	}
