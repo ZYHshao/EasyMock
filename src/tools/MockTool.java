@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class MockTool {
 	
-	private String systemPath = System.getProperty("user.dir");
+
 	private String userPaht = System.getProperty("user.home");
 
 	private Boolean isStarting = false;
@@ -148,21 +148,12 @@ public class MockTool {
 	private String readBaseCommandFile() throws URISyntaxException {
 		String str="";
 
-	    File file=new File(systemPath+"/src/util/server.js");
+		InputStream is=this.getClass().getResourceAsStream("server.js"); 
+        BufferedReader br=new BufferedReader(new InputStreamReader(is));
 	    try {
-	        FileInputStream in=new FileInputStream(file);
-	        // size  为字串的长度 ，这里一次性读完
-
-	        int size=in.available();
-
-	        byte[] buffer=new byte[size];
-
-	        in.read(buffer);
-
-	        in.close();
-
-	        str=new String(buffer,"UTF-8");
-
+	    	String buffer = "";
+	    	 while((buffer=br.readLine())!=null)
+	             str+=(buffer+'\n');
 	    } catch (IOException e) {
 
 	        // TODO Auto-generated catch block
