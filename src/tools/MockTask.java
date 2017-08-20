@@ -2,7 +2,7 @@ package tools;
 
 public class MockTask {
 
-	private String formatString = "app.%s(\'/%s\',function(req,res){var data=Mock.mock(%s);response={\"data\":data};res.end(JSON.stringify(response,null,4));});";
+	private String formatString = "app.%s(\'/%s\',function(req,res){var data=Mock.mock(%s);response=data;res.end(JSON.stringify(response,null,4));});";
 	private String taskString = null;
 
 	public String getTaskString() {
