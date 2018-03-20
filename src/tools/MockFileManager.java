@@ -50,7 +50,7 @@ public class MockFileManager {
         //如果文件夹不存在则创建   
         if  (!dir.exists())     
         {     
-          file.mkdirs();   
+          dir.mkdirs();   
         }  
         if (!file.exists()) {
             try {  
